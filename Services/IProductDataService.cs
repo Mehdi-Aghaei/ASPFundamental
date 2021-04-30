@@ -14,7 +14,7 @@ namespace Refrence.Services
 
         ProductModel GetProductByID(int id);
 
-        int Insert(ProductModel product);
+        bool Insert(ProductModel product);
 
         int Delete(ProductModel product);
 

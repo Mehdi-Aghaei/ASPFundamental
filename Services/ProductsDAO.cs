@@ -17,7 +17,31 @@ namespace Refrence.Services
 
         public int Delete(ProductModel product)
         {
-            throw new NotImplementedException();
+            int newIdNumber = -1;
+            string SqlStatment = "DELETE FROM [dbo].[Products] WHERE Id = @Id";
+
+            using (SqlConnection connection = new(conncetionStr))
+            {
+                SqlCommand command = new(SqlStatment, connection);
+                command.Parameters.AddWithValue("@Id", product.Id);
+                try
+                {
+                    connection.Open();
+                    newIdNumber = Convert.ToInt32( command.ExecuteScalar());
+                    // return first col and first row wich is ussually id
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+
+
+            }
+            return newIdNumber;
+
+
+
         }
         public List<ProductModel> GetAllProducts()
         {
@@ -56,12 +80,69 @@ namespace Refrence.Services
 
         public ProductModel GetProductByID(int id)
         {
-            throw new NotImplementedException();
+            ProductModel foundProduct = null;
+            // name like name is preped statment
+            string SqlStatment = "SELECT * FROM [dbo].[Products] WHERE Id = @Id ";
+
+            using (SqlConnection connection = new(conncetionStr))
+            {
+                SqlCommand command = new(SqlStatment, connection);
+                command.Parameters.AddWithValue("@Id", id);
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        foundProduct=new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] };
+
+                    }
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+
+
+            }
+            return foundProduct;
+
         }
 
-        public int Insert(ProductModel product)
+        public bool Insert(ProductModel product)
         {
-            throw new NotImplementedException();
+            bool success = false;
+            string SqlStatment = @"INSERT INTO [dbo].[Products] (name, price, info) VALUES (@name, @price, @info)";
+
+            using (SqlConnection connection = new(conncetionStr))
+            {
+                SqlCommand command = new(SqlStatment, connection);
+                command.Parameters.AddWithValue("@name", product.Name);
+                command.Parameters.AddWithValue("@price", product.Price);
+                command.Parameters.AddWithValue("@info", product.Info);
+                //command.Parameters.AddWithValue("@Id", product.Id);
+                try
+                {
+                    connection.Open();
+                     SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        success = true;
+                    }
+                    //newIdNumber = Convert.ToInt32(command.ExecuteScalar());
+                    // return first col and first row wich is ussually id
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+
+
+            }
+            return success;
+
         }
 
         public List<ProductModel> SearchProducts(string searchTerm)
@@ -98,7 +179,32 @@ namespace Refrence.Services
 
         public int Update(ProductModel product)
         {
-            throw new NotImplementedException();
+            int newIdNumber = -1;
+            string SqlStatment = "UPDATE [dbo].[Products] SET name = @name, price = @price, info = @info WHERE Id = @Id";
+
+            using (SqlConnection connection = new(conncetionStr))
+            {
+                SqlCommand command = new(SqlStatment, connection);
+                command.Parameters.AddWithValue("@name",product.Name);
+                command.Parameters.AddWithValue("@price", product.Price);
+                command.Parameters.AddWithValue("@info", product.Info);
+                command.Parameters.AddWithValue("@Id", product.Id);
+                try
+                {
+                    connection.Open();
+                    newIdNumber = Convert.ToInt32( command.ExecuteScalar());
+                    // return first col and first row wich is ussually id
+                }
+                catch (Exception e)
+                {
+
+                    Console.WriteLine(e.Message);
+                }
+
+
+            }
+            return newIdNumber;
+
         }
     }
 }

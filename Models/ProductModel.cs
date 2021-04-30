@@ -11,13 +11,15 @@ namespace Refrence.Models
     {
         // we use required attributes for data control and being more spesific
         public int Id { get; set; }
-        [Required]
-        [StringLength(20, MinimumLength = 4)]
+       // [Required]
+       // [StringLength(20, MinimumLength = 4)]
         [DisplayName("Enter full name")]
         public string Name { get; set; }
-        [DataType(DataType.Currency)]
+        //[DataType(DataType.Currency)]
+        //[Range(0, 100)]
         public decimal Price { get; set; }
-        [Range(1, 100)]
+
+       // [StringLength(30,MinimumLength =4)]
         public string Info { get; set; }
     }
 
