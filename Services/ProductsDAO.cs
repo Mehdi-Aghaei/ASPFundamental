@@ -4,14 +4,31 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+/*
+ *         // DAO or Data access object
+ *         Its kind of service that implement our Interface and we will give it some reall functionality here
+ *         to work with data base first we have create a connection string and we can get that from data base 
+ *         don't forget @ :) then one by one we have to work with our methods that we define in Interface
+ *         if the function type was int or bool we have to take a model to work with
+ *         if it was list(is usually with type of our model) we have to init our list in that method
+ *         and if the type was our model we usually take id with type of ints as argument
+ *         then we have to write our SQLSTATMENT which can be update,delete,Insert,Select
+ *         then we will use using method wich we have to define SqlConnection there and assign our connectionStr to that
+ *         then we have to define Sqlcommand and we have to assig our statment and connection to that
+ *         and the that command have lots of attrbute to work with
+ *         then we have to create try catch block for exeption handeling and in try block we have to open a connection and 
+ *         the point of using of using method is it will automaticy close that for us
+ *         and Don't forget to return a type of method at the end of try catch block
+
+
+ */
 
 namespace Refrence.Services
 {
     public class ProductsDAO : IProductDataService
-        
-        // DAO Data access object
+
     {
-        
+
 
         string conncetionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=main;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
@@ -27,7 +44,7 @@ namespace Refrence.Services
                 try
                 {
                     connection.Open();
-                    newIdNumber = Convert.ToInt32( command.ExecuteScalar());
+                    newIdNumber = Convert.ToInt32(command.ExecuteScalar());
                     // return first col and first row wich is ussually id
                 }
                 catch (Exception e)
@@ -50,11 +67,11 @@ namespace Refrence.Services
             // sql statment will use it command that get text and connection
             string SqlStatment = "SELECT * FROM [dbo].[Products] ";
             // using to finish task at the end of block and use SqlClient and from that we will create connetion
-            using(SqlConnection connection = new(conncetionStr))
+            using (SqlConnection connection = new(conncetionStr))
             {
                 SqlCommand command = new(SqlStatment, connection);
-         // try catch block for eror handeling and  clean
-         // we have to open connection and then create reader 
+                // try catch block for eror handeling and  clean
+                // we have to open connection and then create reader 
                 try
                 {
                     connection.Open();
@@ -63,8 +80,8 @@ namespace Refrence.Services
                     // we will cast input because we will get object 
                     while (reader.Read())
                     {
-                        foundProducts.Add(new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info= (string)reader[3] });
-                            
+                        foundProducts.Add(new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] });
+
                     }
                 }
                 catch (Exception e)
@@ -94,7 +111,7 @@ namespace Refrence.Services
                     SqlDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        foundProduct=new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] };
+                        foundProduct = new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] };
 
                     }
                 }
@@ -125,7 +142,7 @@ namespace Refrence.Services
                 try
                 {
                     connection.Open();
-                     SqlDataReader reader = command.ExecuteReader();
+                    SqlDataReader reader = command.ExecuteReader();
                     if (reader.HasRows)
                     {
                         success = true;
@@ -185,14 +202,14 @@ namespace Refrence.Services
             using (SqlConnection connection = new(conncetionStr))
             {
                 SqlCommand command = new(SqlStatment, connection);
-                command.Parameters.AddWithValue("@name",product.Name);
+                command.Parameters.AddWithValue("@name", product.Name);
                 command.Parameters.AddWithValue("@price", product.Price);
                 command.Parameters.AddWithValue("@info", product.Info);
                 command.Parameters.AddWithValue("@Id", product.Id);
                 try
                 {
                     connection.Open();
-                    newIdNumber = Convert.ToInt32( command.ExecuteScalar());
+                    newIdNumber = Convert.ToInt32(command.ExecuteScalar());
                     // return first col and first row wich is ussually id
                 }
                 catch (Exception e)
