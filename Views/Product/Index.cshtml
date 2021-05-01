@@ -3,24 +3,50 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-            
-            
+
+
 <div class="container d-flex flex-wrap">
-    @foreach(var item in Model) {
-        var s = item.Name;
-        // tainury oprator to just get single word
-        var firstWord = s.IndexOf(" ") > -1 ? s.Substring(0, s.IndexOf(" ")) : s;
-    <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="https://loremflickr.com/g/150/150/@firstWord?lock=@item.Id" alt="@item.Name">
-        <div class="card-body">
-            <h5 class="card-title">@item.Name</h5>
-            <p class="card-text">@Html.DisplayFor(m=>item.Price)</p>
-            <p class="card-text">@item.Info</p>
-            <a href="/Product/ShowDetails/@item.Id" class="btn btn-primary">Show Details</a>
-            <a href="/Product/Edit/@item.Id" class="btn btn-warning">Edit</a>
-            <a href="/Product/Delete/@item.Id" class="btn btn-danger">Delete</a>
+    @foreach (var item in Model)
+    {
+        <div id="card-number-@item.Id">
+            <partial name="_productCard" model="item" />
         </div>
-    </div>
     }
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="Id" class="control-label">Id</label>
+                    <input id="modal-input-id" for="Id" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="Name" class="control-label">Name</label>
+                    <input id="modal-input-name" for="Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="Price" class="control-label">Price</label>
+                    <input id="modal-input-price" for="Price" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="Info" class="control-label">Info</label>
+                    <input id="modal-input-info" for="Info" class="form-control" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="save-button" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
