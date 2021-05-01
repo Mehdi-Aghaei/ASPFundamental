@@ -22,9 +22,6 @@ $(function () {
                 $("#modal-input-price").val(data.price);
                 $("#modal-input-info").val(data.info);
 
-
-
-
             }
 
         });
