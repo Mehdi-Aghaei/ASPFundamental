@@ -20,6 +20,8 @@ using System.Threading.Tasks;
  *         then we have to create try catch block for exeption handeling and in try block we have to open a connection and 
  *         the point of using of using method is it will automaticy close that for us
  *         and Don't forget to return a type of method at the end of try catch block
+ *         ExecuteReader when return rows usually for find all or search or get by id and we have to define SqlDataReader
+ *         ExecuteNonQuery row efected
 
 
  */
@@ -89,7 +91,7 @@ namespace Refrence.Services
                         foundProducts.Add(new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] });
 
                     }
-                    // close reader
+                    // closeing reader always is good :)
                     reader.Close();
                 }
                 catch (Exception e)
@@ -211,7 +213,7 @@ namespace Refrence.Services
                 SqlCommand command = new(SqlStatment, connection);
                 command.Parameters.Add("@Id", SqlDbType.Int);
                 command.Parameters["@Id"].Value = product.Id;
-                // with Add we jave more options to make sure and add with value is simpler
+                // with Add we have more options to make sure and add with value is simpler
                 //command.Parameters.AddWithValue("@Id", product.Id);
                 command.Parameters.AddWithValue("@name", product.Name);
                 command.Parameters.AddWithValue("@price", product.Price);

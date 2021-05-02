@@ -14,6 +14,14 @@ namespace Refrence.Controllers
         {
             return View();
         }
+        [HttpGet]
+        [CustomAuthorization]
+        // we can create custom  Attribute by use this [AttrName] and then create class for that and implement
+        //  Attribute, or other INterfaces and classess
+        public IActionResult PrivateSectionMustBeLoggedIn()
+        {
+            return View();
+        }
         public IActionResult ProcessLogin(UserModel user)
         {
             SecurityService securityService = new();
