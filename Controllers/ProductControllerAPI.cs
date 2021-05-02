@@ -5,15 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Description;
 /*
- * we will use all methods from service class here and we can create view of that or form or list
- * we can create method that get model or int(id) to work with and then we can say in which template we wanto to see it
- * also the first thing we have to use is to initialize or service(DAO) as global and then constructor first and then use methods
- * and the viw method can get template name in String and a method also 
- * and also we have to think how we can use this method 
- * we want to send it somewhere or its just query data from data base we want to update or delete and ... and usually we use forms to post data in in anothr method by call it 
- * in asp-action in template
- */
+* we will use all methods from service class here and we can create view of that or form or list
+* we can create method that get model or int(id) to work with and then we can say in which template we wanto to see it
+* also the first thing we have to use is to initialize or service(DAO) as global and then constructor first and then use methods
+* and the viw method can get template name in String and a method also 
+* and also we have to think how we can use this method 
+* we want to send it somewhere or its just query data from data base we want to update or delete and ... and usually we use forms to post data in in anothr method by call it 
+* in asp-action in template
+*/
 namespace Refrence.Controllers
 {
     [ApiController]
@@ -28,11 +29,26 @@ namespace Refrence.Controllers
             repository = new();
         }
         [HttpGet]
-        public ActionResult<IEnumerable<ProductModel>> Index()
+        [ResponseType(typeof(List<ProductModelDTO>))]
+        // we also have install library for response type
+        public IEnumerable<ProductModelDTO> Index()
+        // we remove Action result to data type match to return type
         // IEnumerable is better than list and 
         // but also we can use List
         {
-            return repository.GetAllProducts();
+            // fetch all data in data base in productModel format.
+            List<ProductModel> products = repository.GetAllProducts();
+            //List<ProductModelDTO> productDTOs = new();
+            // translate the list into List of ProductDto object with loop
+            //foreach (var product in products)
+            //{
+            //    productDTOs.Add(new ProductModelDTO(product));
+            //}
+            // We can also use Linq
+            IEnumerable<ProductModelDTO> productModelDTOs = from product in products select new ProductModelDTO(product);
+            ;
+
+            return productModelDTOs;
         }
 
         [HttpGet("SearchResults/{searchTerm}")]
@@ -45,10 +61,13 @@ namespace Refrence.Controllers
 
         [HttpGet("ShowDetails/{Id}")]
         // it will return one object and we just use Product model as type
-        public ActionResult<ProductModel> ShowDetails(int Id)
+        public ActionResult<ProductModelDTO> ShowDetails(int Id)
         {
+            // we change the retun type to dto then we canuser our old init with model
+            // to create dto instance of that object
             ProductModel foundProduct = repository.GetProductByID(Id);
-            return foundProduct;
+            ProductModelDTO foundProductDTO = new(foundProduct);
+            return foundProductDTO;
         }
         [HttpPost("ProcessCreate")]
         // post action
