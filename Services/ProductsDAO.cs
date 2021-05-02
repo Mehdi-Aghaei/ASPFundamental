@@ -136,9 +136,9 @@ namespace Refrence.Services
 
         }
 
-        public bool Insert(ProductModel product)
+        public int Insert(ProductModel product)
         {
-            bool success = false;
+            int rowsAffected = -1;
             string SqlStatment = @"INSERT INTO [dbo].[Products] (name, price, info) VALUES (@name, @price, @info)";
 
             using (SqlConnection connection = new(conncetionStr))
@@ -151,11 +151,8 @@ namespace Refrence.Services
                 try
                 {
                     connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        success = true;
-                    }
+                    rowsAffected = command.ExecuteNonQuery();
+                    // read comments in update about that
                     //newIdNumber = Convert.ToInt32(command.ExecuteScalar());
                     // return first col and first row wich is ussually id
                 }
@@ -167,7 +164,7 @@ namespace Refrence.Services
 
 
             }
-            return success;
+            return rowsAffected;
 
         }
 

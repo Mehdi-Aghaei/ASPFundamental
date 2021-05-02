@@ -30,6 +30,7 @@ namespace Refrence.Services
                     {
                         success = true;
                     }
+                    reader.Close();
 
                 }
                 catch (Exception e)

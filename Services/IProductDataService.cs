@@ -23,7 +23,7 @@ namespace Refrence.Services
 
         ProductModel GetProductByID(int id);
 
-        bool Insert(ProductModel product);
+        int Insert(ProductModel product);
 
         bool Delete(ProductModel product);
 

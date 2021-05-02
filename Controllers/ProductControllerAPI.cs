@@ -53,11 +53,11 @@ namespace Refrence.Controllers
         [HttpPost("ProcessCreate")]
         // post action
         // expecting a product in json format in the body of the request
-        public ActionResult<bool> ProcessCreate(ProductModel product)
+        public ActionResult<int> ProcessCreate(ProductModel product)
         {
             // we have to write type in <> when we use Action result
-            bool status = repository.Insert(product);
-            return status;
+            int rowsAffected = repository.Insert(product);
+            return rowsAffected;
         }
         [HttpPut("ProcessEdit")]
         // put Request
