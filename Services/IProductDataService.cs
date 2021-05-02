@@ -15,7 +15,7 @@ using System.Threading.Tasks;
  */
 namespace Refrence.Services
 {
-    interface IProductDataService
+    public interface IProductDataService
     {
         List<ProductModel> GetAllProducts();
 

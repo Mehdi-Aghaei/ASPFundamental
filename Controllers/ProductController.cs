@@ -18,11 +18,14 @@ namespace Refrence.Controllers
 {
     public class ProductController : Controller
     {
-        ProductsDAO repository;
-        public ProductController()
+        public IProductDataService repository { get; set; }
+        public ProductController(IProductDataService dataService)
         {
-            repository = new();
+            // we can  easily change data sourse in startup and it will automaticly inject here
+            repository = dataService;
         }
+
+        // ProductsDAO repository;
         public IActionResult Index()
         {
             return View(repository.GetAllProducts());
