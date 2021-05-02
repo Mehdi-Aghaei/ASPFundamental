@@ -17,30 +17,27 @@ namespace Refrence.Controllers
         {
             return View();
         }
-        [HttpGet]
-        [CustomAuthorization]
+
         // we can create custom  Attribute by use this [AttrName] and then create class for that and implement
         //  Attribute, or other INterfaces and classess
+        [HttpGet]
+        [CustomAuthorization]
         public IActionResult PrivateSectionMustBeLoggedIn()
         {
-            return View();
+            return Content("What are you looking For here :)) ?");
         }
+        [LogActionFilter]
         public IActionResult ProcessLogin(UserModel user)
         {
-            MyLogger.GetInstance().Info("Processing a login attempt");
-            MyLogger.GetInstance().Info(user.toString());
-            //MyLogger.GetInstance().Info("Processing a login attemp");
             SecurityService securityService = new();
             if (securityService.IsValid(user))
             {
-                MyLogger.GetInstance().Info("Loggin success");
                 HttpContext.Session.SetString("username", user.UserName);
-                //MyLogger.GetInstance().Info("Login Success");
                 return View("LoginSuccess", user);
             }
             else
             {
-                MyLogger.GetInstance().Warning("Login Failure");
+                HttpContext.Session.Remove("username");
                 return View("LoginFailure", user);
             }
         }

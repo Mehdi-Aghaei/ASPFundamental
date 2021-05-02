@@ -54,7 +54,7 @@ namespace Refrence
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            // app.UseAuthorization();
             //new
             app.UseSession();
 

@@ -13,7 +13,7 @@ namespace Refrence.Models
         public string Password { get; set; }
         public string toString()
         {
-            return "Name: " + UserName + " Password: " + Password;
+            return "username: " + UserName + " Password: " + Password;
         }
 
     }
