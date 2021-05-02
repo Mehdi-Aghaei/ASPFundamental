@@ -62,19 +62,20 @@ namespace Refrence.Controllers
         [HttpPut("ProcessEdit")]
         // put Request
         // expect a json formattet object in the bodt of request, id  number must match the item being modified.
-        public ActionResult<ProductModel> ProcessEdit(ProductModel product)
+        public ActionResult<int> ProcessEdit(ProductModel product)
         {
-            repository.Update(product);
-            // to double check
-            return repository.GetProductByID(product.Id);
+            int rowsAffected = repository.Update(product);
+            // old method get product model as type and then return id of that but we do update and return rows affected
+            //return repository.GetProductByID(product.Id);
+            return rowsAffected;
 
         }
         [HttpDelete("Delete/{id}")]
-        public ActionResult<int> Delete(int id)
+        public ActionResult<bool> Delete(int id)
         {
             ProductModel product = repository.GetProductByID(id);
-            int IdNumber = repository.Delete(product);
-            return IdNumber;
+            bool status = repository.Delete(product);
+            return status;
 
         }
 

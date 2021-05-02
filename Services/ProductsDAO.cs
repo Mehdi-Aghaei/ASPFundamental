@@ -1,6 +1,7 @@
 ﻿using Refrence.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,9 +33,9 @@ namespace Refrence.Services
 
         string conncetionStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=main;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        public int Delete(ProductModel product)
+        public bool Delete(ProductModel product)
         {
-            int newIdNumber = -1;
+            bool isDone = false;
             string SqlStatment = "DELETE FROM [dbo].[Products] WHERE Id = @Id";
 
             using (SqlConnection connection = new(conncetionStr))
@@ -43,8 +44,13 @@ namespace Refrence.Services
                 command.Parameters.AddWithValue("@Id", product.Id);
                 try
                 {
+
                     connection.Open();
-                    newIdNumber = Convert.ToInt32(command.ExecuteScalar());
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows == false)
+                    {
+                        isDone = true;
+                    }
                     // return first col and first row wich is ussually id
                 }
                 catch (Exception e)
@@ -55,7 +61,7 @@ namespace Refrence.Services
 
 
             }
-            return newIdNumber;
+            return isDone;
 
 
 
@@ -83,6 +89,8 @@ namespace Refrence.Services
                         foundProducts.Add(new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] });
 
                     }
+                    // close reader
+                    reader.Close();
                 }
                 catch (Exception e)
                 {
@@ -114,6 +122,7 @@ namespace Refrence.Services
                         foundProduct = new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] };
 
                     }
+                    reader.Close();
                 }
                 catch (Exception e)
                 {
@@ -182,6 +191,7 @@ namespace Refrence.Services
                         foundProducts.Add(new ProductModel { Id = (int)reader[0], Name = (string)reader[1], Price = (decimal)reader[2], Info = (string)reader[3] });
 
                     }
+                    reader.Close();
                 }
                 catch (Exception e)
                 {
@@ -196,21 +206,27 @@ namespace Refrence.Services
 
         public int Update(ProductModel product)
         {
-            int newIdNumber = -1;
+            int rowsAffected = -1;
             string SqlStatment = "UPDATE [dbo].[Products] SET name = @name, price = @price, info = @info WHERE Id = @Id";
 
             using (SqlConnection connection = new(conncetionStr))
             {
                 SqlCommand command = new(SqlStatment, connection);
+                command.Parameters.Add("@Id", SqlDbType.Int);
+                command.Parameters["@Id"].Value = product.Id;
+                // with Add we jave more options to make sure and add with value is simpler
+                //command.Parameters.AddWithValue("@Id", product.Id);
                 command.Parameters.AddWithValue("@name", product.Name);
                 command.Parameters.AddWithValue("@price", product.Price);
                 command.Parameters.AddWithValue("@info", product.Info);
-                command.Parameters.AddWithValue("@Id", product.Id);
+
                 try
                 {
                     connection.Open();
-                    newIdNumber = Convert.ToInt32(command.ExecuteScalar());
-                    // return first col and first row wich is ussually id
+                    // Executes a Transact-SQL statement against the connection and returns the number of rows affected.
+                    rowsAffected = command.ExecuteNonQuery();
+                    //newIdNumber = Convert.ToInt32(command.ExecuteScalar());
+                    // excuteScalar return first col and first row wich is ussually id old method
                 }
                 catch (Exception e)
                 {
@@ -220,7 +236,7 @@ namespace Refrence.Services
 
 
             }
-            return newIdNumber;
+            return rowsAffected;
 
         }
     }

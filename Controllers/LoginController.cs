@@ -14,16 +14,16 @@ namespace Refrence.Controllers
         {
             return View();
         }
-        public IActionResult ProcessLogin(UserModel userModel)
+        public IActionResult ProcessLogin(UserModel user)
         {
             SecurityService securityService = new();
-            if (securityService.IsValid(userModel))
+            if (securityService.IsValid(user))
             {
-                return View("LoginSuccess", userModel);
+                return View("LoginSuccess", user);
             }
             else
             {
-                return View("LoginFailure", userModel);
+                return View("LoginFailure", user);
             }
         }
     }

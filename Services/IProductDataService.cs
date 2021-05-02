@@ -25,7 +25,7 @@ namespace Refrence.Services
 
         bool Insert(ProductModel product);
 
-        int Delete(ProductModel product);
+        bool Delete(ProductModel product);
 
         int Update(ProductModel product);
 
